@@ -3,7 +3,7 @@
 if [ $# -lt 1 ]
 then
 	echo "Please pass ip addr file for remote host to monitor"
-	echo "Usage ./memorymon.sh XXX.XXX.XXX.XXX"
+	echo "Usage ./resourcemon.sh XXX.XXX.XXX.XXX"
 	exit
 fi
 
@@ -15,12 +15,12 @@ export tmp_ps_mon_path=/tmp/${ps_mon_file}
 export resource_append=_resource_usage.dat
 export resource_usage_plot=resourceusageplot.in
 
-#copy script to remote host
+#copy script and process list to remote host
 scp ${ps_mon_file} "root@${ip_addr}:${tmp_ps_mon_path}"
 scp ${tmp_process_list_file} "root@${ip_addr}:${tmp_process_list_path}"
 
 #kill previously running task and launch new one on remote host
-ssh "root@${ip_addr}" "pkill ${ps_mon_file}; ${tmp_ps_mon_path} &"
+ssh -n "root@${ip_addr}" "pkill ${ps_mon_file}; chmod +x ${tmp_ps_mon_path}; ${tmp_ps_mon_path} &"
 
 # wait for script to launch
 sleep 5
@@ -33,8 +33,9 @@ while (true) do
 	done < ${tmp_process_list_file}
 
 	#run gnuplot
-	gnuplot -e "file_name='${tmp_resource_data_path}'" $resource_usage_plot
-	#exit gnuplot window
+	gnuplot $resource_usage_plot
+
+	#close gnuplot window
 	pkill "gnuplot $resource_usage_plot"
 
 done

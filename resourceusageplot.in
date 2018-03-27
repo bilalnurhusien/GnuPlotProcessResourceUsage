@@ -29,7 +29,7 @@ do for [filename in filelist] {
 	print filename
 
 	set title filename
-	plot filename using 1:2 with linespoints title 'CPU', file_name using 1:3 with linespoints title 'MEM'
+	plot filename using 1:2 with linespoints title 'CPU', filename using 1:3 with linespoints title 'MEM'
 }
 
 print "Sleeping..."
