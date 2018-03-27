@@ -1,0 +1,42 @@
+#! /usr/bin/gnuplot
+
+#format
+set xlabel 'Time (24 Hr)'
+set ylabel 'Percentage (%)'
+set xdata time
+set timefmt "%H:%M"
+set format x "%H:%M"
+set print "-"
+
+
+#tickmarks
+set xtic auto
+set ytic auto
+
+#ranges
+set grid
+layout_size=system("ls /tmp/*_resource_usage.dat | wc -l")
+set terminal wxt size 3000,1000
+set multiplot layout 4, layout_size / 3
+set autoscale
+
+filelist=system("ls /tmp/*_resource_usage.dat")
+
+!date
+
+do for [filename in filelist] {
+	print "Printing plot..."
+	print filename
+
+	set title filename
+	plot filename using 1:2 with linespoints title 'CPU', file_name using 1:3 with linespoints title 'MEM'
+}
+
+print "Sleeping..."
+pause 60
+
+unset multiplot
+
+!date
+print "Waking up..."
+exit
