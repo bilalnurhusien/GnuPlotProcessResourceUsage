@@ -17,10 +17,10 @@ set ytic auto
 set grid
 layout_size=system("ls /tmp/*_resource_usage.dat | wc -l")
 set terminal wxt size 3000,1000
-set multiplot layout 4, layout_size / 3
+set multiplot layout 3, layout_size / 3
 set autoscale
 
-filelist=system("ls /tmp/*_resource_usage.dat")
+filelist=system("ls /tmp/*_resource-usage.dat")
 
 !date
 

@@ -12,7 +12,7 @@ export ps_mon_file=psmon.sh
 export tmp_process_list_file=processlist.in
 export tmp_process_list_path=/tmp/${tmp_process_list_file}
 export tmp_ps_mon_path=/tmp/${ps_mon_file}
-export resource_append=_resource_usage.dat
+export resource_append=-resource-usage.dat
 export resource_usage_plot=resourceusageplot.in
 
 #copy script and process list to remote host
@@ -29,7 +29,8 @@ while (true) do
 
 	#copy resource usage data
 	while read p; do
-			scp "root@${ip_addr}:/tmp/${p}${resource_append}" /tmp/
+			export file=`echo "${p}" | sed -e 's/_/-/g'`
+			scp "root@${ip_addr}:/tmp/${file}${resource_append}" /tmp/
 	done < ${tmp_process_list_file}
 
 	#run gnuplot
